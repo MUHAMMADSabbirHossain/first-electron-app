@@ -29,3 +29,45 @@
 import './index.css';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+// console.log(window.electronAPI);
+
+
+// window.bridge.send("tesing asd;kfldsj;l");
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const regFormElement = document.querySelector('#registrationForm');
+    // const button = document.querySelector('button');
+    const submitResponseElement = document.querySelector('#submitResponse');
+
+    regFormElement.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        // console.log("Registration form submit", event.target);
+
+        const regFormData = {
+            email: event.target.email.value,
+            password: event.target.password.value
+        }
+        console.log(regFormData);
+
+        if (regFormData.password.length < 6) {
+            submitResponseElement.innerHTML = "Password must be at least 6 characters";
+            return;
+        }
+
+        // send data to main process
+        const renRes = await window.bridge.formData(regFormData);
+        console.log({ renRes });
+        if (!renRes.id) {
+            submitResponseElement.innerHTML = renRes.error;
+            return;
+        }
+
+        submitResponseElement.innerHTML = `You have successfully registered with Email: ${renRes.email}`
+    })
+
+})
+
+
+// window.bridge.formData('');

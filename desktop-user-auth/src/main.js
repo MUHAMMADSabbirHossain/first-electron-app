@@ -1,5 +1,4 @@
-import { app, BrowserWindow } from 'electron';
-import path from 'node:path';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import started from 'electron-squirrel-startup';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -7,9 +6,11 @@ if (started) {
   app.quit();
 }
 
+let mainWindow;
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -37,6 +38,60 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+
+
+  ipcMain.handle('formdata', async (event, data) => {
+    console.log(data);
+    let responseData = {
+      x: 10,
+      y: 5
+    };
+    // fetch('https://jsonplaceholder.typicode.com/posts', {
+    //   method: 'POST',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // }).then(response => response.json())
+    //   .then(json => {
+    //     console.log({ json })
+    //     responseData = json;
+    //     return json;
+    //   })
+    //   .catch(error => console.log({ error }));
+
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const json = await response.json();
+    console.log({ json });
+
+    return json;
+
+    // response = json;
+    // console.log({ responseData });
+    // return responseData;
+  });
+
+  // mainWindow.webContents.send('webContentsSend', 'webContents test ');
+
+  // ipcMain.handle('preloaderToMain', (event, data) => {
+  //   console.log(data);
+
+  //  return "i data paisi"
+  // });
+
+  // ipcMain.handle('input-data', (event, data) => {
+  //   console.log(data);
+  // return{
+  //   x:10,
+  //   y:5
+  // }
+  // });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
