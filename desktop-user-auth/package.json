@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "nodemon --exec electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -25,6 +25,7 @@
     "css-loader": "^6.0.0",
     "electron": "34.1.1",
     "node-loader": "^2.0.0",
+    "nodemon": "^3.1.9",
     "style-loader": "^3.0.0"
   },
   "keywords": [],
