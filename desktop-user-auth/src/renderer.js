@@ -61,11 +61,15 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log({ renRes });
 
         if (!renRes?.insertedId) {
-            submitResponseElement.innerHTML = `<p style="color:red", font-weight: bold, font-size: 16px, margin-top: 20px>${renRes?.message}</p>`
+            submitResponseElement.innerHTML = `<p style="color:red", font-weight: bold, font-size: 16px, margin-top: 20px>${renRes?.message}</p>`;
+
             return;
         }
 
-        submitResponseElement.innerHTML = `<p style="color:#009000", font-weight: bold, font-size: 16px, margin-top: 20px>You have successfully registered with Email: ${regFormData?.email}</p>`
+        submitResponseElement.innerHTML = `<p style="color:#009000", font-weight: bold, font-size: 16px, margin-top: 20px>You have successfully registered with Email: ${regFormData?.email}</p>`;
+
+        // reset form input fields
+        regFormElement.reset();
     })
 
 })
