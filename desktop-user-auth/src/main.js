@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Notification } from 'electron';
 import started from 'electron-squirrel-startup';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -42,10 +42,11 @@ app.whenReady().then(() => {
 
   ipcMain.handle('formdata', async (event, data) => {
     console.log(data);
-    let responseData = {
-      x: 10,
-      y: 5
-    };
+
+    // let responseData = {
+    //   x: 10,
+    //   y: 5
+    // };
     // fetch('https://jsonplaceholder.typicode.com/posts', {
     //   method: 'POST',
     //   body: JSON.stringify(data),
@@ -59,7 +60,11 @@ app.whenReady().then(() => {
     //     return json;
     //   })
     //   .catch(error => console.log({ error }));
+    // response = json;
+    // console.log({ responseData });
+    // return responseData;
 
+    // dummy response
     const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -70,11 +75,18 @@ app.whenReady().then(() => {
     const json = await response.json();
     console.log({ json });
 
-    return json;
+    if (!json.id) {
+      new Notification({
+        title: 'Something went wrong to register.',
+        body: 'Please try again. If the problem persists, please contact us.'
+      }).show();
+    }
 
-    // response = json;
-    // console.log({ responseData });
-    // return responseData;
+    new Notification({
+      title: `You have successfully registered with Email: ${json.email}`,
+      body: 'You can login now',
+    }).show();
+    return json;
   });
 
   // mainWindow.webContents.send('webContentsSend', 'webContents test ');
