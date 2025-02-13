@@ -52,19 +52,20 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(regFormData);
 
         if (regFormData.password.length < 6) {
-            submitResponseElement.innerHTML = "Password must be at least 6 characters";
+            submitResponseElement.innerHTML = `<p style="color:red", font-weight: bold, font-size: 16px, margin-top: 20px>Password must be at least 6 characters long</p>`;
             return;
         }
 
         // send data to main process
         const renRes = await window.bridge.formData(regFormData);
         console.log({ renRes });
-        if (!renRes.id) {
-            submitResponseElement.innerHTML = renRes.error;
+
+        if (!renRes?.insertedId) {
+            submitResponseElement.innerHTML = `<p style="color:red", font-weight: bold, font-size: 16px, margin-top: 20px>${renRes?.message}</p>`
             return;
         }
 
-        submitResponseElement.innerHTML = `You have successfully registered with Email: ${renRes.email}`
+        submitResponseElement.innerHTML = `<p style="color:#009000", font-weight: bold, font-size: 16px, margin-top: 20px>You have successfully registered with Email: ${regFormData?.email}</p>`
     })
 
 })

@@ -38,11 +38,34 @@ async function run() {
 
 
         // get all users
-        // app.get(`/users`, async (req, res) => {
-        //     const cursor = usersCollection.find();
-        //     const result = await cursor.toArray();
+        app.get(`/users`, async (req, res) => {
+            const cursor = usersCollection.find();
+            const result = await cursor.toArray();
 
-        //     res.send(result);
+            res.send(result);
+        })
+
+
+        // post users for register
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+
+            const query = { email: user.email };
+            const existingUser = await usersCollection.findOne(query);
+            if (existingUser) {
+                return res.send({ message: 'User already exists' });
+            }
+
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        })
+
+        // // login users
+        // app.get('/users/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const query = { email: email };
+        //     const user = await usersCollection.findOne(query);
+        //     res.send(user);
         // })
 
 

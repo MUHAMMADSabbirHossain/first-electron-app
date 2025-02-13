@@ -65,7 +65,7 @@ app.whenReady().then(() => {
     // return responseData;
 
     // dummy response
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+    const response = await fetch(`http://localhost:5000/users`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -75,18 +75,22 @@ app.whenReady().then(() => {
     const json = await response.json();
     console.log({ json });
 
-    if (!json.id) {
+    if (!json.insertedId) {
       new Notification({
-        title: 'Something went wrong to register.',
+        title: `Something went wrong to register. ${json?.message}.`,
         body: 'Please try again. If the problem persists, please contact us.'
       }).show();
+
+      return json;
+    } else {
+      new Notification({
+        title: `You have successfully registered with Email: ${data?.email}`,
+        body: 'You can login now',
+      }).show();
+
+      return json;
     }
 
-    new Notification({
-      title: `You have successfully registered with Email: ${json.email}`,
-      body: 'You can login now',
-    }).show();
-    return json;
   });
 
   // mainWindow.webContents.send('webContentsSend', 'webContents test ');
